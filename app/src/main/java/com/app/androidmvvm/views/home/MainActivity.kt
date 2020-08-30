@@ -5,7 +5,10 @@ import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.androidmvvm.R
+import com.app.androidmvvm.adapters.HomeAdapter
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,10 +22,13 @@ class MainActivity : AppCompatActivity() {
         homeActivityViewModelFactory = HomeActivityViewModelFactory(this)
         homeActivityModelView = ViewModelProvider(this, homeActivityViewModelFactory).get(HomeActivityModelView::class.java)
 
+        val homeAdapter : HomeAdapter = HomeAdapter()
+        _popularMovieList.layoutManager = LinearLayoutManager(this)
+        _popularMovieList.adapter = homeAdapter
+
         homeActivityModelView.getPopularMovies().observe(this, Observer {
-            it.forEach { movie ->
-                Log.d("Debug", movie.title)
-            }
+            homeAdapter.popularMovies = it
+            homeAdapter.notifyDataSetChanged()
         })
     }
 }
