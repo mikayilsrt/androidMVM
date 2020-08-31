@@ -11,6 +11,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var homeAdapter : HomeAdapter
     private lateinit var homeActivityViewModelFactory : HomeActivityViewModelFactory
     private lateinit var homeActivityModelView : HomeActivityViewModel
 
@@ -18,16 +19,20 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        homeActivityViewModelFactory = HomeActivityViewModelFactory(this)
-        homeActivityModelView = ViewModelProvider(this, homeActivityViewModelFactory).get(HomeActivityViewModel::class.java)
+        initialRecyclerView()
 
-        val homeAdapter : HomeAdapter = HomeAdapter()
+        this.homeActivityViewModelFactory = HomeActivityViewModelFactory(this)
+        this.homeActivityModelView = ViewModelProvider(this, homeActivityViewModelFactory).get(HomeActivityViewModel::class.java)
+
+        this.homeActivityModelView.getPopularMovies().observe(this, Observer {
+            this.homeAdapter.popularMovies = it
+            this.homeAdapter.notifyDataSetChanged()
+        })
+    }
+
+    private fun initialRecyclerView() {
+        this.homeAdapter = HomeAdapter()
         _popularMovieList.layoutManager = LinearLayoutManager(this)
         _popularMovieList.adapter = homeAdapter
-
-        homeActivityModelView.getPopularMovies().observe(this, Observer {
-            homeAdapter.popularMovies = it
-            homeAdapter.notifyDataSetChanged()
-        })
     }
 }
