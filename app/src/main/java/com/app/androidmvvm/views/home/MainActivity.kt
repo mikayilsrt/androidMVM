@@ -2,7 +2,6 @@ package com.app.androidmvvm.views.home
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,14 +12,14 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     private lateinit var homeActivityViewModelFactory : HomeActivityViewModelFactory
-    private lateinit var homeActivityModelView : HomeActivityModelView
+    private lateinit var homeActivityModelView : HomeActivityViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         homeActivityViewModelFactory = HomeActivityViewModelFactory(this)
-        homeActivityModelView = ViewModelProvider(this, homeActivityViewModelFactory).get(HomeActivityModelView::class.java)
+        homeActivityModelView = ViewModelProvider(this, homeActivityViewModelFactory).get(HomeActivityViewModel::class.java)
 
         val homeAdapter : HomeAdapter = HomeAdapter()
         _popularMovieList.layoutManager = LinearLayoutManager(this)

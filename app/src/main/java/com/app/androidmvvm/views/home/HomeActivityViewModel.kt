@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import com.app.androidmvvm.datas.models.Movie
 import com.app.androidmvvm.datas.repository.MovieRepository
 
-class HomeActivityModelView(context: AppCompatActivity) : ViewModel() {
+class HomeActivityViewModel(context: AppCompatActivity) : ViewModel() {
 
     private val movieRepository : MovieRepository = MovieRepository()
 
