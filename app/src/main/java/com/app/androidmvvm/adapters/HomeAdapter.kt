@@ -6,6 +6,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.androidmvvm.R
 import com.app.androidmvvm.datas.models.Movie
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
+import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
 import kotlinx.android.synthetic.main.movie_item.view.*
 
 class HomeAdapter(var popularMovies : List<Movie> = listOf()) : RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
@@ -25,6 +28,14 @@ class HomeAdapter(var popularMovies : List<Movie> = listOf()) : RecyclerView.Ada
 
     inner class ViewHolder(private val view : View) : RecyclerView.ViewHolder(view) {
         fun bind(movie : Movie) {
+            val factory : DrawableCrossFadeFactory = DrawableCrossFadeFactory.Builder().setCrossFadeEnabled(true).build()
+            Glide
+                .with(view.context)
+                .load("https://image.tmdb.org/t/p/w500" + movie.poster_path)
+                .transition(withCrossFade(factory))
+                .centerCrop()
+                .into(view._moviePoster)
+
             view._title.text = movie.title
         }
     }
