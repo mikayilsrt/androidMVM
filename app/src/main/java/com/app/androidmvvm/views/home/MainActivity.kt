@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var homeAdapter : HomeAdapter
     private lateinit var homeActivityViewModelFactory : HomeActivityViewModelFactory
-    private lateinit var homeActivityModelView : HomeActivityViewModel
+    private lateinit var homeActivityViewModel : HomeActivityViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,9 +22,9 @@ class MainActivity : AppCompatActivity() {
         initialRecyclerView()
 
         this.homeActivityViewModelFactory = HomeActivityViewModelFactory(this)
-        this.homeActivityModelView = ViewModelProvider(this, homeActivityViewModelFactory).get(HomeActivityViewModel::class.java)
+        this.homeActivityViewModel = ViewModelProvider(this, homeActivityViewModelFactory).get(HomeActivityViewModel::class.java)
 
-        this.homeActivityModelView.getPopularMovies().observe(this, Observer {
+        this.homeActivityViewModel.getPopularMovies().observe(this, Observer {
             this.homeAdapter.popularMovies = it
             this.homeAdapter.notifyDataSetChanged()
         })
