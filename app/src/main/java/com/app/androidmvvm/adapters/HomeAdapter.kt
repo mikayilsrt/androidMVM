@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.androidmvvm.R
 import com.app.androidmvvm.datas.models.Movie
+import com.app.androidmvvm.views.movie.MovieActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
@@ -37,6 +38,8 @@ class HomeAdapter(var popularMovies : List<Movie> = listOf()) : RecyclerView.Ada
                 .into(view._moviePoster)
 
             view._title.text = movie.title
+
+            view.setOnClickListener { MovieActivity.start(view.context, movie.id)  }
         }
     }
 }
