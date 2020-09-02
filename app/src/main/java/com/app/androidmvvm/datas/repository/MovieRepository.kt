@@ -19,6 +19,11 @@ class MovieRepository {
         return this._popularMovies
     }
 
+    private val _movie : MutableLiveData<Movie> = MutableLiveData()
+    fun getMovie() : LiveData<Movie> {
+        return this._movie
+    }
+
     fun callPopularMovies() {
         service.getPopularMovies().enqueue(object: Callback<PopularMoviesFromService<List<Movie>>> {
             override fun onFailure(
@@ -32,6 +37,17 @@ class MovieRepository {
             ) {
                 if (response.isSuccessful)
                     this@MovieRepository._popularMovies.value = response.body()?.results
+            }
+        })
+    }
+
+    fun callMovie(id: Int) {
+        service.getMovie(id).enqueue(object: Callback<Movie> {
+            override fun onFailure(call: Call<Movie>, t: Throwable) = Unit
+
+            override fun onResponse(call: Call<Movie>, response: Response<Movie>) {
+                if (response.isSuccessful)
+                    this@MovieRepository._movie.value = response.body()
             }
         })
     }
