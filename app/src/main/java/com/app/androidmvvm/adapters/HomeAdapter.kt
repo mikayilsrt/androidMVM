@@ -8,6 +8,7 @@ import com.app.androidmvvm.R
 import com.app.androidmvvm.datas.models.Movie
 import com.app.androidmvvm.views.movie.MovieActivity
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
 import kotlinx.android.synthetic.main.movie_item.view.*
@@ -34,7 +35,7 @@ class HomeAdapter(var popularMovies : List<Movie> = listOf()) : RecyclerView.Ada
                 .with(view.context)
                 .load("https://image.tmdb.org/t/p/w500" + movie.poster_path)
                 .transition(withCrossFade(factory))
-                .centerCrop()
+                .transform(RoundedCorners(9))
                 .into(view._moviePoster)
 
             view._title.text = movie.title
