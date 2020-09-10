@@ -4,13 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.app.androidmvvm.datas.models.Movie
 import com.app.androidmvvm.datas.models.PopularMoviesFromService
+import com.app.androidmvvm.datas.repository.dao.MovieDao
 import com.app.androidmvvm.datas.services.MovieService
 import com.app.androidmvvm.datas.services.ServiceObject
+import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MovieRepository {
+class MovieRepository(private val movieDao: MovieDao) {
 
     private val service : MovieService = ServiceObject.retrofit.create(MovieService::class.java)
 
@@ -25,20 +27,35 @@ class MovieRepository {
     }
 
     fun callPopularMovies() {
-        service.getPopularMovies().enqueue(object: Callback<PopularMoviesFromService<List<Movie>>> {
-            override fun onFailure(
-                call: Call<PopularMoviesFromService<List<Movie>>>,
-                t: Throwable
-            ) = Unit
+        GlobalScope.launch {
+            val movieList : List<Movie> = movieDao.getAllMovies()
+            if (movieList.isNotEmpty()) {
+                withContext(Dispatchers.Main) {
+                    this@MovieRepository._popularMovies.value = movieList
+                }
+            } else {
+                service.getPopularMovies().enqueue(object: Callback<PopularMoviesFromService<List<Movie>>> {
+                    override fun onFailure(
+                        call: Call<PopularMoviesFromService<List<Movie>>>,
+                        t: Throwable
+                    ) = Unit
 
-            override fun onResponse(
-                call: Call<PopularMoviesFromService<List<Movie>>>,
-                response: Response<PopularMoviesFromService<List<Movie>>>
-            ) {
-                if (response.isSuccessful)
-                    this@MovieRepository._popularMovies.value = response.body()?.results
+                    override fun onResponse(
+                        call: Call<PopularMoviesFromService<List<Movie>>>,
+                        response: Response<PopularMoviesFromService<List<Movie>>>
+                    ) {
+                        if (response.isSuccessful) {
+                            this@MovieRepository._popularMovies.value = response.body()?.results
+                            GlobalScope.launch {
+                                response.body()?.results?.forEach {
+                                    movieDao.insert(it)
+                                }
+                            }
+                        }
+                    }
+                })
             }
-        })
+        }
     }
 
     fun callMovie(id: Int) {
