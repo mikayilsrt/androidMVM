@@ -59,14 +59,23 @@ class MovieRepository(private val movieDao: MovieDao) {
     }
 
     fun callMovie(id: Int) {
-        service.getMovie(id).enqueue(object: Callback<Movie> {
-            override fun onFailure(call: Call<Movie>, t: Throwable) = Unit
+        GlobalScope.launch {
+            val movie : Movie = movieDao.getMovieById(id)
+            if (!movie.equals(null)) {
+                withContext(Dispatchers.Main) {
+                    this@MovieRepository._movie.value = movie
+                }
+            } else {
+                service.getMovie(id).enqueue(object: Callback<Movie> {
+                    override fun onFailure(call: Call<Movie>, t: Throwable) = Unit
 
-            override fun onResponse(call: Call<Movie>, response: Response<Movie>) {
-                if (response.isSuccessful)
-                    this@MovieRepository._movie.value = response.body()
+                    override fun onResponse(call: Call<Movie>, response: Response<Movie>) {
+                        if (response.isSuccessful)
+                            this@MovieRepository._movie.value = response.body()
+                    }
+                })
             }
-        })
+        }
     }
 
 }
