@@ -5,9 +5,8 @@ import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.app.androidmvvm.R
 import com.app.androidmvvm.adapters.HomeAdapter
-import kotlinx.android.synthetic.main.activity_main.*
+import com.app.androidmvvm.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,9 +14,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var homeActivityViewModelFactory : HomeActivityViewModelFactory
     private lateinit var homeActivityViewModel : HomeActivityViewModel
 
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        this.binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(this.binding.root)
 
         initialRecyclerView()
 
@@ -32,7 +34,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initialRecyclerView() {
         this.homeAdapter = HomeAdapter()
-        _popularMovieList.layoutManager = LinearLayoutManager(this)
-        _popularMovieList.adapter = homeAdapter
+        this.binding.PopularMovieList.layoutManager = LinearLayoutManager(this)
+        this.binding.PopularMovieList.adapter = homeAdapter
     }
 }

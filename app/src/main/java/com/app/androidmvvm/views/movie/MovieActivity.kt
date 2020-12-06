@@ -6,12 +6,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.app.androidmvvm.R
+import com.app.androidmvvm.databinding.ActivityMovieBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
-import kotlinx.android.synthetic.main.activity_movie.*
 
 class MovieActivity : AppCompatActivity() {
 
@@ -32,9 +31,12 @@ class MovieActivity : AppCompatActivity() {
     private lateinit var movieActivityViewModel : MovieActivityViewModel
     private lateinit var movieActivityViewModelFactory: MovieActivityViewModelFactory
 
+    private lateinit var binding: ActivityMovieBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_movie)
+        this.binding = ActivityMovieBinding.inflate(layoutInflater)
+        setContentView(this.binding.root)
 
         val factory : DrawableCrossFadeFactory = DrawableCrossFadeFactory.Builder().setCrossFadeEnabled(true).build()
 
@@ -42,14 +44,14 @@ class MovieActivity : AppCompatActivity() {
         this.movieActivityViewModel = ViewModelProvider(this, this.movieActivityViewModelFactory).get(MovieActivityViewModel::class.java)
 
         this.movieActivityViewModel.getMovie().observe(this, Observer {
-            _title.text = it.title
+            this.binding.Title.text = it.title
 
             Glide
                 .with(this)
                 .load("https://image.tmdb.org/t/p/w500" + it.poster_path)
                 .transition(DrawableTransitionOptions.withCrossFade(factory))
                 .transform(RoundedCorners(17))
-                .into(_moviePoster)
+                .into(this.binding.MoviePoster)
         })
     }
 }
