@@ -44,7 +44,7 @@ class MovieActivity : AppCompatActivity() {
         this.movieActivityViewModel = ViewModelProvider(this, this.movieActivityViewModelFactory).get(MovieActivityViewModel::class.java)
 
         this.movieActivityViewModel.getMovie().observe(this, Observer {
-            this.binding.Title.text = it.title
+            binding.movie = it
 
             Glide
                 .with(this)

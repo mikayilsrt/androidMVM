@@ -1,40 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".views.movie.MovieActivity">
-
-    <LinearLayout
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="movie"
+            type="com.app.androidmvvm.datas.models.Movie" />
+    </data>
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginVertical="24dp"
-        android:layout_marginHorizontal="14dp"
-        android:orientation="horizontal">
-        <FrameLayout
-            android:layout_width="130dp"
-            android:layout_height="match_parent">
-            <ImageView
-                android:id="@+id/_moviePoster"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-        </FrameLayout>
-
-        <Space
-            android:layout_width="10dp"
-            android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="9pt"
-                android:textStyle="bold"/>
-        </LinearLayout>
-    </LinearLayout>
+            android:layout_height="200dp"
+            android:layout_marginVertical="24dp"
+            android:layout_marginHorizontal="14dp"
+            android:orientation="horizontal">
+            <FrameLayout
+                android:layout_width="130dp"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/_moviePoster"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+            </FrameLayout>
 
-</ScrollView>
+            <Space
+                android:layout_width="10dp"
+                android:layout_height="match_parent"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{movie.original_title}"
+                    android:textSize="9pt"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
+</layout>
